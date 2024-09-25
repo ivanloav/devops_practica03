@@ -7,39 +7,45 @@ jobs:
   check_pull_request:
     runs-on: ubuntu-latest
     steps:
-      # Paso 1: Análisis de SAST (simulado)
+      # Paso 1: Checkout del código
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Paso 2: Análisis de SAST (simulado)
       - name: Realizar análisis de SAST
         run: echo "Realizando análisis de SAST"
 
       # Paso extra: Verificar archivos en el directorio
       - name: Verificar archivos en el directorio
         run: ls -la
+        working-directory: ${{ github.workspace }}
 
-      # Paso 2: Comprobar requisitos (archivo allow_pull_request.txt)
+      # Paso 3: Comprobar si se permite el Pull Request
       - name: Comprobar si se permite el Pull Request
         id: check_allow_pull
         run: |
-          if [ -f allow_pull_request.txt ]; then
+          if [ -f ${{ github.workspace }}/allow_pull_request.txt ]; then
             echo "allow_pull=true" >> $GITHUB_ENV
             echo "Archivo allow_pull_request.txt encontrado"
           else
             echo "allow_pull=false" >> $GITHUB_ENV
             echo "Archivo allow_pull_request.txt NO encontrado"
           fi
+        working-directory: ${{ github.workspace }}
 
-      # Paso 3: Permitir la build si allow_pull es True
+      # Paso 4: Permitir la build si allow_pull es True
       - name: Permitir Pull Request
         if: env.allow_pull == 'true'
         run: echo "Permitiendo Pull Request"
 
-      # Paso 4: Impedir la build si allow_pull es False
+      # Paso 5: Impedir la build si allow_pull es False
       - name: Impedir Pull Request
         if: env.allow_pull == 'false'
         run: |
           echo "Build fallida. Impidiendo Pull Request"
           exit 1
 
-      # Paso 5: Guardar artefactos
+      # Paso 6: Guardar artefactos
       - name: Guardar artefactos
         if: always()
         uses: actions/upload-artifact@v3
