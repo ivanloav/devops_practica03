@@ -14,6 +14,11 @@ jobs:
       - name: Pruebas de SAST
         run: echo "Ejecución de pruebas de SAST"
 
+      - name: Verificar acceso a secretos
+        run: |
+          echo "USERNAME: ${{ secrets.USERNAME }}"
+          echo "PASSWORD: ${{ secrets.PASSWORD }}"
+
       # Paso 2: Crear archivo de credenciales
       - name: Crear archivo de credenciales
         run: |
@@ -25,4 +30,4 @@ jobs:
       # Paso 3: Construcción de Docker
       - name: Build docker image
         run: |
-          docker build -t devops_ws:$(date +%s) .
+          docker build -t devops_ws . --tag devops_ws_:$(date +%s)
