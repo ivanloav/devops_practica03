@@ -25,4 +25,5 @@ jobs:
       # Paso 3: Construcción de Docker
       - name: Build docker image
         run: |
-          docker build -t devops_ws . --tag devops_ws:$(date +%s)
+          docker build -t devops_ws:$(date +%s) .
+        working-directory: ${{ github.workspace }}
