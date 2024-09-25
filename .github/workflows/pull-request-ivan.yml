@@ -11,14 +11,20 @@ jobs:
       - name: Realizar análisis de SAST
         run: echo "Realizando análisis de SAST"
 
+      # Paso extra: Verificar archivos en el directorio
+      - name: Verificar archivos en el directorio
+        run: ls -la
+
       # Paso 2: Comprobar requisitos (archivo allow_pull_request.txt)
       - name: Comprobar si se permite el Pull Request
         id: check_allow_pull
         run: |
           if [ -f allow_pull_request.txt ]; then
             echo "allow_pull=true" >> $GITHUB_ENV
+            echo "Archivo allow_pull_request.txt encontrado"
           else
             echo "allow_pull=false" >> $GITHUB_ENV
+            echo "Archivo allow_pull_request.txt NO encontrado"
           fi
 
       # Paso 3: Permitir la build si allow_pull es True
@@ -26,7 +32,7 @@ jobs:
         if: env.allow_pull == 'true'
         run: echo "Permitiendo Pull Request"
 
-      # Paso 4: Impedir Pull Request si allow_pull es False
+      # Paso 4: Impedir la build si allow_pull es False
       - name: Impedir Pull Request
         if: env.allow_pull == 'false'
         run: |
