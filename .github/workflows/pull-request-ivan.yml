@@ -26,17 +26,17 @@ jobs:
         if: env.allow_pull == 'true'
         run: echo "Permitiendo Pull Request"
 
-      # Paso 4: Impedir la build si allow_pull es False
+      # Paso 4: Impedir Pull Request si allow_pull es False
       - name: Impedir Pull Request
         if: env.allow_pull == 'false'
         run: |
           echo "Build fallida. Impidiendo Pull Request"
           exit 1
 
-      # Paso 5: Guardar el archivo allow_pull_request.txt como artefacto
+      # Paso 5: Guardar artefactos
       - name: Guardar artefactos
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: pull-request-check
           path: allow_pull_request.txt
