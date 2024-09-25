@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+      - feature*
+      - hotfix*
 
 jobs:
   build:
@@ -18,7 +20,7 @@ jobs:
       - name: Pruebas de SAST
         run: echo "Ejecución de pruebas de SAST"
 
-        # Paso 2: Crear archivo de credenciales
+      # Paso 2: Crear archivo de credenciales
       - name: Crear archivo de credenciales
         run: |
           echo "[credentials]" > credentials.ini
@@ -29,4 +31,4 @@ jobs:
       # Paso 3: Construcción de Docker
       - name: Build docker image
         run: |
-          docker build -t devops_ws . --tag devops_ws:$(date +%s)
+          docker build -t devops_ws:$(date +%s) .
